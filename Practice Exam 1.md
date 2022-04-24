@@ -62,6 +62,7 @@ usermod -aG operations alex
 	chmod g=2770 /group/livingopensource
 	chmod g=2770 /group/operations
 	setfacl -R -m g:operations:rx /group/operations
+	setfacl -R -m d:g:operations:rx /group/operations
 	```
 	
 6. Create a 2-GiB volume group, using 8-MiB physical extents. In this volume group, create a 500-MiB logical volume with the name **mydata,** and mount it persistently on the directory /mydata.
@@ -119,8 +120,8 @@ podman run -d -n rsyslog1 -p 514:514 -v /var/log/logcontainer:/var/log:Z rsyslog
 ```bash
 mkdir -p ~/.config/systemd/user
 cd ~/.config/systemd/user/
-podman generate systemd rsyslog --files --new
-loginctl enable-linger
-systemctl --user daemon-reload
+podman generate systemd --name rsyslog --files 
+loginctl enable-linger username #root user
+systemctl --user daemon-reload #via ssh
 systemctl --user enable --now container-rsyslog
 ```
